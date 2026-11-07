@@ -2,7 +2,7 @@
   "schema_version": 1,
   "id": "apoc.race-broadcast",
   "name": "Race Broadcast",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "repository": "https://github.com/apoc101/Race-Broadcast-F125",
   "icon": "icon.png",
   "author": "Apoc",

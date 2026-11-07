@@ -1,4 +1,4 @@
-# Race Broadcast (v0.5.1 beta)
+# Race Broadcast (v0.5.2 beta)
 
 Watch AI races like a TV broadcast. One addon combining:
 

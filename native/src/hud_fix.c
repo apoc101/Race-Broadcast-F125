@@ -93,3 +93,33 @@ static void hud_keep_up(void)
     __atomic_fetch_and((volatile uint32_t *)(hm_addr + 4), ~1u, __ATOMIC_SEQ_CST);
     hm_update((void *)hm_addr);
 }
+
+/* Project Aeternum draws the graphics: the game's own spectator HUD stays hidden even when the game would bring it back
+   (under the safety car, for instance). We set hide reason 0 ourselves and remember it, so it is cleared again when the
+   broadcast stops and your own HUD comes back when you drive. */
+static int hm_forced;
+static void hud_keep_down(void)
+{
+    if (!hm_found) hm_find();
+    hb_set(0);
+    if (!hm_addr || !hm_update) return;
+    uint32_t m[2] = {0, 0};
+    if (!mem_read(hm_addr, m, 8) || ((m[0] & 1u) && (m[1] & 1u))) return;
+    if (now() - hm_fix_at < 0.25) return;
+    hm_fix_at = now();
+    __atomic_fetch_or((volatile uint32_t *)hm_addr, 1u, __ATOMIC_SEQ_CST);
+    __atomic_fetch_or((volatile uint32_t *)(hm_addr + 4), 1u, __ATOMIC_SEQ_CST);
+    hm_update((void *)hm_addr);
+    if (!hm_forced) LOG("game spectator HUD: kept hidden for Aeternum");
+    hm_forced = 1;
+}
+static void hud_release(void)
+{
+    if (!hm_forced) return;
+    hm_forced = 0;
+    if (!hm_addr || !hm_update) return;
+    __atomic_fetch_and((volatile uint32_t *)hm_addr, ~1u, __ATOMIC_SEQ_CST);
+    __atomic_fetch_and((volatile uint32_t *)(hm_addr + 4), ~1u, __ATOMIC_SEQ_CST);
+    hm_update((void *)hm_addr);
+    LOG("game spectator HUD: released");
+}

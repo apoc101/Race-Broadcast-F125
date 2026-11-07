@@ -20,7 +20,7 @@
 #include <swofty_api.h>
 
 #ifndef ADDON_VERSION
-#define ADDON_VERSION "0.5.1 beta"
+#define ADDON_VERSION "0.5.2 beta"
 #endif
 #define TAG "[race-broadcast] "
 
@@ -575,6 +575,7 @@ static void spectate_off(const char *why)
     watch_active = 0;
     cur_follow = -1;
     hb_set(0);
+    hud_release();
     if (o && o->spectator_set_active && was) {
         int r = o->spectator_set_active(0);
         LOG("spectate OFF (%s) -> %d", why, r);
@@ -1678,6 +1679,13 @@ static int on_hud_visible(void *user, SwoftyHookCall *call)
     (void)user;
     HudVisible *e = call ? (HudVisible *)call->payload : 0;
     if (e && watch_active && !g_aet && !e->visible) e->visible = 1;
+    /* with Project Aeternum drawing the graphics, the game's own timing tower stays hidden, including when the game
+       would show it by itself (under the safety car, on your own car, after the HUD key) */
+    else if (e && watch_active && g_aet && e->visible) {
+        static double logged;
+        e->visible = 0;
+        if (now() - logged > 30) logged = now(), LOG("game spectator HUD wanted on: kept hidden (Aeternum)");
+    }
     return 0;
 }
 
@@ -1770,7 +1778,8 @@ static void frame(double dt, void *user)
     aet_tick(t);
     gfx_tick(t);
     if (watch_active && !g_aet) hud_keep_up();
-    else if (g_aet) hb_set(0);                      /* let the game hide its spectator HUD: Aeternum draws the graphics */
+    else if (watch_active && g_aet) hud_keep_down(); /* Aeternum draws the graphics: keep the game's spectator HUD hidden */
+    else hud_release();
     publish();
 }
 
