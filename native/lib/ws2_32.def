@@ -1,0 +1,9 @@
+LIBRARY ws2_32.dll
+EXPORTS
+WSAStartup
+socket
+bind
+setsockopt
+recvfrom
+closesocket
+WSAGetLastError

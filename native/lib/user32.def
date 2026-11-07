@@ -1,0 +1,14 @@
+LIBRARY user32.dll
+EXPORTS
+GetAsyncKeyState
+GetForegroundWindow
+GetWindowThreadProcessId
+MapVirtualKeyW
+SendInput
+FindWindowW
+EnumWindows
+GetWindowTextW
+IsWindowVisible
+GetWindowRect
+SetWindowPos
+GetSystemMetrics

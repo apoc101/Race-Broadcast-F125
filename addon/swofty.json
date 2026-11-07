@@ -1,0 +1,404 @@
+{
+  "schema_version": 1,
+  "id": "apoc.race-broadcast",
+  "name": "Race Broadcast",
+  "version": "0.5.1",
+  "repository": "https://github.com/apoc101/Race-Broadcast-F125",
+  "author": "Apoc",
+  "description": "Watch AI races like TV: the AI drives your car, the race goes on after a crash, an auto director follows the action, with replays and a four-voice commentary team.",
+  "license": "MIT",
+  "category": "utility",
+  "kind": [
+    "native"
+  ],
+  "compat": {
+    "game": "f1_25",
+    "launcher": ">=1.7.0",
+    "game_builds": [
+      ">=25251167"
+    ]
+  },
+  "requires": [
+    {
+      "id": "swofty.core",
+      "version": ">=0.2.13"
+    }
+  ],
+  "experimental_features": [
+    "overlay"
+  ],
+  "options": [
+    {
+      "id": "ai_key",
+      "type": "choice",
+      "label": "AI drive: on/off key",
+      "description": "Press in a race to let the game's AI drive your car; press again to take over.",
+      "values": [
+        "F1",
+        "F2",
+        "F3",
+        "F4",
+        "F5",
+        "F6",
+        "F7",
+        "F8",
+        "F9",
+        "F10",
+        "F11",
+        "off"
+      ],
+      "default": "F5",
+      "binds": "native"
+    },
+    {
+      "id": "ai_from_start",
+      "type": "toggle",
+      "label": "AI drive: from the start",
+      "description": "The AI takes your car a few seconds after the race starts (races only).",
+      "default": false,
+      "binds": "native"
+    },
+    {
+      "id": "handback",
+      "type": "choice",
+      "label": "AI drive: take-over countdown",
+      "description": "When you take the car back: at once, or after a countdown.",
+      "values": [
+        {
+          "value": "0",
+          "label": "At once"
+        },
+        {
+          "value": "3",
+          "label": "3 seconds"
+        },
+        {
+          "value": "5",
+          "label": "5 seconds"
+        }
+      ],
+      "default": "3",
+      "binds": "native"
+    },
+    {
+      "id": "watch_key",
+      "type": "choice",
+      "label": "Broadcast: on/off key",
+      "description": "Turns the broadcast camera on or off by hand.",
+      "values": [
+        "F1",
+        "F2",
+        "F3",
+        "F4",
+        "F5",
+        "F6",
+        "F7",
+        "F8",
+        "F9",
+        "F10",
+        "F11",
+        "off"
+      ],
+      "default": "F4",
+      "binds": "native"
+    },
+    {
+      "id": "watch_with_ai",
+      "type": "toggle",
+      "label": "Broadcast: start when the AI drives",
+      "description": "Switches to the broadcast as soon as the AI has your car.",
+      "default": true,
+      "binds": "native"
+    },
+    {
+      "id": "watch_after_crash",
+      "type": "toggle",
+      "label": "Broadcast: start when your car is out",
+      "description": "Watch the rest of the race after you crash or retire.",
+      "default": true,
+      "binds": "native"
+    },
+    {
+      "id": "keep_race",
+      "type": "toggle",
+      "label": "Crash: keep the race running",
+      "description": "When your car is wrecked the race goes on and you watch it (idea and method from Spectator/Broadcast Mode by Kizi & RK).",
+      "default": true,
+      "binds": "native"
+    },
+    {
+      "id": "garage_after",
+      "type": "choice",
+      "label": "Crash: send the wreck to the garage",
+      "description": "Seconds after the crash, or never.",
+      "values": [
+        {
+          "value": "0",
+          "label": "Never"
+        },
+        {
+          "value": "3",
+          "label": "3 s"
+        },
+        {
+          "value": "6",
+          "label": "6 s"
+        },
+        {
+          "value": "10",
+          "label": "10 s"
+        }
+      ],
+      "default": "6",
+      "binds": "native"
+    },
+    {
+      "id": "director",
+      "type": "toggle",
+      "label": "Director: auto camera",
+      "description": "The camera follows the best story: incidents, overtakes, battles, the leader.",
+      "default": true,
+      "binds": "native"
+    },
+    {
+      "id": "director_key",
+      "type": "choice",
+      "label": "Director: on/off key",
+      "description": "Turns the auto director on or off during the broadcast (off = use the game's own keys).",
+      "values": [
+        "F1",
+        "F2",
+        "F3",
+        "F4",
+        "F5",
+        "F6",
+        "F7",
+        "F8",
+        "F9",
+        "F10",
+        "F11",
+        "off"
+      ],
+      "default": "F3",
+      "binds": "native"
+    },
+    {
+      "id": "hold",
+      "type": "slider",
+      "label": "Director: minimum shot length (s)",
+      "description": "How long the camera stays on a car before it may move to a better battle. Incidents cut in sooner.",
+      "min": 4,
+      "max": 20,
+      "step": 1,
+      "default": 12,
+      "binds": "native"
+    },
+    {
+      "id": "camera",
+      "type": "choice",
+      "label": "Director: camera",
+      "description": "Broadcast camera, TV pod (onboard), or a mix (onboard for battles, broadcast for the rest).",
+      "values": [
+        {
+          "value": "broadcast",
+          "label": "Broadcast"
+        },
+        {
+          "value": "tv_pod",
+          "label": "TV pod"
+        },
+        {
+          "value": "mix",
+          "label": "Mix"
+        }
+      ],
+      "default": "broadcast",
+      "binds": "native"
+    },
+    {
+      "id": "own_bias",
+      "type": "choice",
+      "label": "Director: favour my car",
+      "description": "Show your own car more often.",
+      "values": [
+        {
+          "value": "off",
+          "label": "Off"
+        },
+        {
+          "value": "light",
+          "label": "Light"
+        },
+        {
+          "value": "strong",
+          "label": "Strong"
+        }
+      ],
+      "default": "off",
+      "binds": "native"
+    },
+    {
+      "id": "replays",
+      "type": "choice",
+      "label": "Replays (experimental)",
+      "description": "Auto director only. Offers replays of contact, the start, restarts and big overtakes (F9 to watch), or plays them automatically. Works through the pause menu: keep the game window in front.",
+      "values": [
+        {
+          "value": "offer",
+          "label": "Offer (F9)"
+        },
+        {
+          "value": "auto",
+          "label": "Automatic"
+        },
+        {
+          "value": "off",
+          "label": "Off"
+        }
+      ],
+      "default": "off",
+      "binds": "native"
+    },
+    {
+      "id": "commentary",
+      "type": "choice",
+      "label": "Commentary (optional, beta)",
+      "description": "On (Normal) by default. Ben (lead), Graham (expert), Tom (pit lane) and Erin (strategy), with a preview on the formation lap. Voices: see Commentary voices. Restart the game after changing.",
+      "values": [
+        {
+          "value": "off",
+          "label": "Off"
+        },
+        {
+          "value": "quiet",
+          "label": "Quiet"
+        },
+        {
+          "value": "normal",
+          "label": "Normal"
+        },
+        {
+          "value": "chatty",
+          "label": "Chatty"
+        }
+      ],
+      "default": "normal",
+      "binds": "native"
+    },
+    {
+      "id": "commentary_voices",
+      "type": "choice",
+      "label": "Commentary voices",
+      "description": "Recorded: natural voices recorded with Google Gemini, with drivers' names (no download). Piper: free offline voices that read every detail live (about 250 MB download on first use).",
+      "values": [
+        {
+          "value": "recorded",
+          "label": "Recorded (Gemini)"
+        },
+        {
+          "value": "piper",
+          "label": "Piper (live text to speech)"
+        }
+      ],
+      "default": "recorded",
+      "binds": "native"
+    },
+    {
+      "id": "aeternum",
+      "type": "toggle",
+      "label": "Graphics: use Project Aeternum",
+      "description": "While Project Aeternum is running, it draws the broadcast graphics: our captions and tower stand down, the game's spectator HUD is not held up, and telemetry is read on Aeternum's port 20778.",
+      "default": true,
+      "binds": "native"
+    },
+    {
+      "id": "aeternum_gfx",
+      "type": "toggle",
+      "label": "Graphics: director runs Aeternum",
+      "description": "The director decides which of Project Aeternum's graphics are on screen: battle for, catching, driver cards, pit lane, tyres, damage, weather. The leaderboard stays as your profile has it; the track map is kept off.",
+      "default": true,
+      "binds": "native"
+    },
+    {
+      "id": "aeternum_layout",
+      "type": "toggle",
+      "label": "Graphics: director places Aeternum's graphics",
+      "description": "Places the car graphics (live speed, tyre life, car status, pit lane, weather...) in the bottom right corner, stacking upwards. The leaderboard stays where your Aeternum layout puts it.",
+      "default": true,
+      "binds": "native"
+    },
+    {
+      "id": "captions",
+      "type": "toggle",
+      "label": "Graphics: captions",
+      "description": "A lower-third caption saying why the camera is on that car.",
+      "default": true,
+      "binds": "native"
+    },
+    {
+      "id": "tower",
+      "type": "toggle",
+      "label": "Graphics: own timing tower",
+      "description": "Our own tower on the left. Off by default: the addon keeps the game's spectator timing tower up instead.",
+      "default": false,
+      "binds": "native"
+    },
+    {
+      "id": "toasts",
+      "type": "toggle",
+      "label": "Graphics: game notifications too",
+      "description": "Also show each story in the game's own race notification.",
+      "default": false,
+      "binds": "native"
+    },
+    {
+      "id": "feed",
+      "type": "toggle",
+      "label": "Event feed (for testing)",
+      "description": "Writes every story to addon-storage\\apoc.race-broadcast\\events.txt. Not needed for the commentary.",
+      "default": false,
+      "binds": "native"
+    },
+    {
+      "id": "camera_key",
+      "type": "choice",
+      "label": "Keys: game's camera key",
+      "description": "Pressed once when the broadcast ends, so your normal camera comes back. Set it to your change-camera key.",
+      "values": [
+        "C",
+        "V",
+        "off"
+      ],
+      "default": "C",
+      "binds": "native"
+    },
+    {
+      "id": "udp_port",
+      "type": "choice",
+      "label": "Telemetry: UDP port",
+      "description": "The port the game's UDP telemetry is sent to (Settings > Telemetry: UDP On, IP 127.0.0.1, format 2026 or 2025). Use 20778 if another program already uses 20777.",
+      "values": [
+        "20777",
+        "20778",
+        "20779"
+      ],
+      "default": "20777",
+      "binds": "native"
+    },
+    {
+      "id": "debug",
+      "type": "toggle",
+      "label": "Debug log",
+      "description": "Logs every story the director sees.",
+      "default": false,
+      "binds": "native"
+    }
+  ],
+  "operations": {
+    "native": [
+      {
+        "dll": "native/race_broadcast.dll"
+      }
+    ]
+  }
+}

@@ -1,0 +1,6 @@
+build/
+*.dll
+*.obj
+*.lib
+addon/commentary/voices.zip
+*.swoftyaddon
