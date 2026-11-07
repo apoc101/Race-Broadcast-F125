@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs><linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1d222c"/><stop offset="1" stop-color="#0b0d12"/></linearGradient></defs>
+  <rect width="512" height="512" rx="96" fill="url(#bg)"/>
+  <rect x="64" y="96" width="384" height="272" rx="30" fill="#0f1218" stroke="#ffffff" stroke-width="18"/>
+  <path d="M120 300 C120 230 170 220 200 250 C230 280 260 280 270 240 C282 190 330 150 380 170 C420 186 410 236 370 250 C330 264 330 310 370 318" fill="none" stroke="#3a4150" stroke-width="26" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M120 300 C120 230 170 220 200 250 C230 280 260 280 270 240 C282 190 330 150 380 170 C420 186 410 236 370 250 C330 264 330 310 370 318" fill="none" stroke="#ffffff" stroke-width="6" stroke-linecap="round" stroke-dasharray="2 14" opacity="0.7"/>
+  <circle cx="270" cy="240" r="16" fill="#e10600" stroke="#ffffff" stroke-width="5"/>
+  <circle cx="166" cy="232" r="11" fill="#ffffff"/>
+  <rect x="90" y="120" width="98" height="36" rx="8" fill="#e10600"/>
+  <text x="139" y="146" font-family="Inter" font-weight="800" font-size="24" fill="#fff" text-anchor="middle">LIVE</text>
+  <rect x="216" y="386" width="80" height="16" rx="8" fill="#ffffff"/>
+  <rect x="166" y="410" width="180" height="16" rx="8" fill="#ffffff"/>
+</svg>

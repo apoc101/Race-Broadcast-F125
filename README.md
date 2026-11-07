@@ -35,7 +35,8 @@ Nothing is sent anywhere else: no accounts, no analytics, no other network use.
 | `native/src/replays*.c`, `hud_fix.c` | Replays and the spectator HUD |
 | `native/include/swofty_api.h` | Swofty's addon API header (MIT) |
 | `native/lib/*.def` | The Windows functions the DLL imports |
-| `addon/` | Everything else in the package: `swofty.json`, the addon README, the commentary script and settings |
+| `addon/` | Everything else in the package: `swofty.json`, the icon, the addon README, the commentary script and settings |
+| `art/icon.svg` | The icon, as a vector file |
 
 The recorded voices (`addon/commentary/voices.zip`, about 70 MB of MP3s) are not in the repository; they are in the published package.
 

@@ -4,6 +4,7 @@
   "name": "Race Broadcast",
   "version": "0.5.1",
   "repository": "https://github.com/apoc101/Race-Broadcast-F125",
+  "icon": "icon.png",
   "author": "Apoc",
   "description": "Watch AI races like TV: the AI drives your car, the race goes on after a crash, an auto director follows the action, with replays and a four-voice commentary team.",
   "license": "MIT",
